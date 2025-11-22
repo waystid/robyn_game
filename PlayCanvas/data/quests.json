@@ -1,0 +1,108 @@
+[
+  {
+    "questID": "main_ancient_library",
+    "questName": "The Ancient Library",
+    "description": "The Elder Sage has asked you to find the location of the ancient library hidden in the forest.",
+    "questType": "main",
+    "prerequisites": [],
+    "objectives": [
+      {
+        "description": "Talk to Elder Sage",
+        "type": "dialogue",
+        "targetNPCID": "elder_sage",
+        "targetCount": 1,
+        "currentProgress": 0
+      },
+      {
+        "description": "Find the ancient map",
+        "type": "item",
+        "targetItemID": "ancient_map",
+        "targetCount": 1,
+        "currentProgress": 0
+      },
+      {
+        "description": "Discover the library location",
+        "type": "location",
+        "targetLocationID": "ancient_library",
+        "targetCount": 1,
+        "currentProgress": 0
+      }
+    ],
+    "rewards": {
+      "experience": 200,
+      "gold": 100,
+      "items": [
+        {
+          "itemID": "spell_book",
+          "quantity": 1
+        }
+      ]
+    }
+  },
+  {
+    "questID": "side_farming_basics",
+    "questName": "Farming 101",
+    "description": "Learn the basics of farming from the local farmer.",
+    "questType": "side",
+    "prerequisites": [],
+    "objectives": [
+      {
+        "description": "Plant 5 seeds",
+        "type": "farming",
+        "action": "plant",
+        "targetCount": 5,
+        "currentProgress": 0
+      },
+      {
+        "description": "Water your plants",
+        "type": "farming",
+        "action": "water",
+        "targetCount": 5,
+        "currentProgress": 0
+      },
+      {
+        "description": "Harvest crops",
+        "type": "farming",
+        "action": "harvest",
+        "targetCount": 5,
+        "currentProgress": 0
+      }
+    ],
+    "rewards": {
+      "experience": 100,
+      "gold": 50,
+      "items": [
+        {
+          "itemID": "seed_moonflower",
+          "quantity": 10
+        }
+      ]
+    }
+  },
+  {
+    "questID": "side_gather_apples",
+    "questName": "Apple Harvest",
+    "description": "The village baker needs fresh apples for their pies.",
+    "questType": "side",
+    "prerequisites": [],
+    "objectives": [
+      {
+        "description": "Collect 10 apples",
+        "type": "item",
+        "targetItemID": "apple",
+        "targetCount": 10,
+        "currentProgress": 0
+      }
+    ],
+    "rewards": {
+      "experience": 50,
+      "gold": 25,
+      "items": [
+        {
+          "itemID": "apple_pie",
+          "quantity": 1
+        }
+      ]
+    }
+  }
+]

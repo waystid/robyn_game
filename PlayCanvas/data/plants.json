@@ -1,0 +1,72 @@
+[
+  {
+    "plantID": "plant_moonflower",
+    "name": "Moonflower",
+    "description": "A mystical flower that blooms under moonlight.",
+    "growthStages": 4,
+    "timePerStage": 120,
+    "seasonsToGrow": ["spring", "summer"],
+    "requiresWater": true,
+    "waterPerDay": 1,
+    "harvestYield": {
+      "itemID": "moonflower",
+      "minQuantity": 1,
+      "maxQuantity": 3
+    },
+    "seedItemID": "seed_moonflower",
+    "sellValue": 40
+  },
+  {
+    "plantID": "plant_wheat",
+    "name": "Wheat",
+    "description": "Basic crop used for baking.",
+    "growthStages": 3,
+    "timePerStage": 60,
+    "seasonsToGrow": ["spring", "summer", "autumn"],
+    "requiresWater": true,
+    "waterPerDay": 1,
+    "harvestYield": {
+      "itemID": "wheat",
+      "minQuantity": 2,
+      "maxQuantity": 5
+    },
+    "seedItemID": "seed_wheat",
+    "sellValue": 10
+  },
+  {
+    "plantID": "plant_tomato",
+    "name": "Tomato",
+    "description": "Juicy red tomatoes.",
+    "growthStages": 4,
+    "timePerStage": 90,
+    "seasonsToGrow": ["summer"],
+    "requiresWater": true,
+    "waterPerDay": 2,
+    "harvestYield": {
+      "itemID": "tomato",
+      "minQuantity": 3,
+      "maxQuantity": 6
+    },
+    "seedItemID": "seed_tomato",
+    "sellValue": 20,
+    "regrows": true,
+    "regrowthTime": 60
+  },
+  {
+    "plantID": "plant_carrot",
+    "name": "Carrot",
+    "description": "Crunchy orange vegetables.",
+    "growthStages": 3,
+    "timePerStage": 45,
+    "seasonsToGrow": ["spring", "autumn"],
+    "requiresWater": true,
+    "waterPerDay": 1,
+    "harvestYield": {
+      "itemID": "carrot",
+      "minQuantity": 1,
+      "maxQuantity": 3
+    },
+    "seedItemID": "seed_carrot",
+    "sellValue": 15
+  }
+]
