@@ -426,6 +426,12 @@ namespace CozyGame.SaveSystem
                 data.statisticsData = Achievements.StatisticsTracker.Instance.GetSaveData();
             }
 
+            // Capture pet data
+            if (Pets.PetManager.Instance != null)
+            {
+                data.petData = Pets.PetManager.Instance.GetSaveData();
+            }
+
             // Capture world data
             data.worldData.gameTime = GetCurrentPlaytime();
             if (GameManager.Instance != null)
@@ -506,6 +512,12 @@ namespace CozyGame.SaveSystem
             if (Achievements.StatisticsTracker.Instance != null)
             {
                 Achievements.StatisticsTracker.Instance.LoadSaveData(data.statisticsData);
+            }
+
+            // Apply pet data
+            if (Pets.PetManager.Instance != null)
+            {
+                Pets.PetManager.Instance.LoadSaveData(data.petData);
             }
 
             Log("Game state applied from save data");

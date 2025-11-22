@@ -42,6 +42,9 @@ namespace CozyGame.SaveSystem
         [Header("Statistics Data")]
         public Dictionary<string, float> statisticsData = new Dictionary<string, float>();
 
+        [Header("Pet Data")]
+        public List<Pets.PetSaveData> petData = new List<Pets.PetSaveData>();
+
         /// <summary>
         /// Create new save data with default values
         /// </summary>
