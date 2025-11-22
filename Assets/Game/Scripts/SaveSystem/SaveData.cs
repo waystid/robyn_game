@@ -161,12 +161,13 @@ namespace CozyGame.SaveSystem
     }
 
     /// <summary>
-    /// Inventory save data (for future inventory system)
+    /// Inventory save data
     /// </summary>
     [System.Serializable]
     public class InventorySaveData
     {
         public List<ItemSaveData> items = new List<ItemSaveData>();
+        public Dictionary<string, string> equippedItems = new Dictionary<string, string>(); // slot -> itemID
         public int currency = 0;
     }
 
@@ -179,6 +180,10 @@ namespace CozyGame.SaveSystem
         public string itemID;
         public int quantity = 1;
         public int slotIndex = 0;
+
+        public ItemSaveData()
+        {
+        }
 
         public ItemSaveData(string id, int qty, int slot)
         {

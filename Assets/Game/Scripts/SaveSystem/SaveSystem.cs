@@ -402,6 +402,18 @@ namespace CozyGame.SaveSystem
             // TODO: Implement when PlantManager is created
             // data.plantData = PlantManager.Instance.GetSaveData();
 
+            // Capture inventory data
+            if (Inventory.InventorySystem.Instance != null)
+            {
+                data.inventoryData.items = Inventory.InventorySystem.Instance.GetSaveData();
+            }
+
+            // Capture equipment data
+            if (Inventory.EquipmentSystem.Instance != null)
+            {
+                data.inventoryData.equippedItems = Inventory.EquipmentSystem.Instance.GetSaveData();
+            }
+
             // Capture world data
             data.worldData.gameTime = GetCurrentPlaytime();
             if (GameManager.Instance != null)
@@ -459,6 +471,18 @@ namespace CozyGame.SaveSystem
 
             // Apply plant data
             // TODO: Implement when PlantManager is created
+
+            // Apply inventory data
+            if (Inventory.InventorySystem.Instance != null)
+            {
+                Inventory.InventorySystem.Instance.LoadSaveData(data.inventoryData.items);
+            }
+
+            // Apply equipment data
+            if (Inventory.EquipmentSystem.Instance != null)
+            {
+                Inventory.EquipmentSystem.Instance.LoadSaveData(data.inventoryData.equippedItems);
+            }
 
             Log("Game state applied from save data");
         }
