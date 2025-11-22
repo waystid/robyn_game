@@ -9,9 +9,12 @@ namespace CozyGame.UI
     /// <summary>
     /// Crafting UI controller.
     /// Shows available recipes and handles crafting.
+    /// Integrates with CraftingManager for recipe unlocks and success/failure.
     /// </summary>
     public class CraftingUI : MonoBehaviour
     {
+        public static CraftingUI Instance { get; private set; }
+
         [Header("UI References")]
         [Tooltip("Crafting panel")]
         public GameObject craftingPanel;
@@ -40,6 +43,18 @@ namespace CozyGame.UI
 
         private CraftingRecipe selectedRecipe;
 
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void Start()
         {
             // Setup buttons
@@ -67,23 +82,32 @@ namespace CozyGame.UI
         {
             discoveredRecipes.Clear();
 
-            // Add assigned recipes
-            if (availableRecipes != null)
+            // Get recipes from CraftingManager if available
+            if (CraftingManager.Instance != null)
             {
-                discoveredRecipes.AddRange(availableRecipes);
-            }
+                // Get unlocked recipes
+                discoveredRecipes.AddRange(CraftingManager.Instance.GetUnlockedRecipes());
 
-            // Also load from Resources
-            CraftingRecipe[] resourceRecipes = Resources.LoadAll<CraftingRecipe>("Recipes");
-            foreach (var recipe in resourceRecipes)
-            {
-                if (recipe != null && !discoveredRecipes.Contains(recipe))
+                // Get station-specific recipes if at a station
+                CraftingStation station = CraftingManager.Instance.GetCurrentStation();
+                if (station != null)
                 {
-                    // Only add if discovered by default or already discovered
-                    if (recipe.isDiscoveredByDefault)
+                    List<CraftingRecipe> stationRecipes = station.GetAvailableRecipes();
+                    foreach (var recipe in stationRecipes)
                     {
-                        discoveredRecipes.Add(recipe);
+                        if (!discoveredRecipes.Contains(recipe) && CraftingManager.Instance.IsRecipeUnlocked(recipe.recipeID))
+                        {
+                            discoveredRecipes.Add(recipe);
+                        }
                     }
+                }
+            }
+            else
+            {
+                // Fallback: use assigned recipes
+                if (availableRecipes != null)
+                {
+                    discoveredRecipes.AddRange(availableRecipes);
                 }
             }
 
@@ -159,16 +183,24 @@ namespace CozyGame.UI
             if (selectedRecipe == null)
                 return;
 
-            bool success = selectedRecipe.Craft();
+            bool success;
 
-            if (success)
+            // Use CraftingManager if available (with success/failure mechanics)
+            if (CraftingManager.Instance != null)
             {
-                // Refresh UI
-                RefreshRecipeList();
-
-                // Re-select to update details
-                OnRecipeSelected(selectedRecipe);
+                success = CraftingManager.Instance.AttemptCraft(selectedRecipe);
             }
+            else
+            {
+                // Fallback: direct craft
+                success = selectedRecipe.Craft();
+            }
+
+            // Refresh UI regardless of success
+            RefreshRecipeList();
+
+            // Re-select to update details
+            OnRecipeSelected(selectedRecipe);
         }
 
         /// <summary>
