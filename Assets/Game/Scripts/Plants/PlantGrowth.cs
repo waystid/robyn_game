@@ -37,6 +37,31 @@ namespace CozyGame.Plants
         [Tooltip("Auto-grow without needing water?")]
         public bool autoGrow = false;
 
+        [Header("Time/Weather Integration")]
+        [Tooltip("Use TimeManager for growth (game time instead of real time)")]
+        public bool useGameTime = true;
+
+        [Tooltip("Hours of game time per growth stage")]
+        public float gameHoursPerStage = 2f;
+
+        [Tooltip("Only grow during daytime")]
+        public bool requiresDaylight = false;
+
+        [Tooltip("Weather affects growth speed")]
+        public bool weatherAffectsGrowth = true;
+
+        [Tooltip("Growth speed during rain (multiplier)")]
+        [Range(0f, 3f)]
+        public float rainGrowthBonus = 1.5f;
+
+        [Tooltip("Growth speed during clear weather (multiplier)")]
+        [Range(0f, 3f)]
+        public float clearWeatherGrowth = 1f;
+
+        [Tooltip("Growth speed during storm (multiplier)")]
+        [Range(0f, 3f)]
+        public float stormGrowthPenalty = 0.8f;
+
         [Header("Visual")]
         [Tooltip("Container for stage models")]
         public Transform modelContainer;
@@ -88,14 +113,99 @@ namespace CozyGame.Plants
                 }
             }
 
+            // Check daylight requirement
+            if (requiresDaylight && Environment.TimeManager.Instance != null)
+            {
+                if (!Environment.TimeManager.Instance.IsDaytime())
+                {
+                    // Not daytime, pause growth
+                    return;
+                }
+            }
+
+            // Calculate growth delta
+            float growthDelta = CalculateGrowthDelta();
+
             // Grow over time
-            currentStageTime += Time.deltaTime * growthSpeedMultiplier;
+            currentStageTime += growthDelta;
 
             // Check if ready to advance to next stage
-            float timeForThisStage = plantData.GetStageGrowthTime(currentStage);
+            float timeForThisStage = GetStageTimeRequirement();
             if (currentStageTime >= timeForThisStage)
             {
                 AdvanceToNextStage();
+            }
+        }
+
+        /// <summary>
+        /// Calculate growth delta for this frame
+        /// </summary>
+        private float CalculateGrowthDelta()
+        {
+            float delta = Time.deltaTime * growthSpeedMultiplier;
+
+            // Use game time instead of real time
+            if (useGameTime && Environment.TimeManager.Instance != null)
+            {
+                // Convert real time to game time
+                float timeScale = Environment.TimeManager.Instance.timeScale;
+                delta = Time.deltaTime * timeScale;
+            }
+
+            // Apply weather modifiers
+            if (weatherAffectsGrowth && Environment.WeatherManager.Instance != null)
+            {
+                Environment.WeatherState currentWeather = Environment.WeatherManager.Instance.GetCurrentWeather();
+                float weatherMultiplier = GetWeatherGrowthMultiplier(currentWeather);
+                delta *= weatherMultiplier;
+            }
+
+            return delta;
+        }
+
+        /// <summary>
+        /// Get weather-based growth multiplier
+        /// </summary>
+        private float GetWeatherGrowthMultiplier(Environment.WeatherState weather)
+        {
+            switch (weather)
+            {
+                case Environment.WeatherState.Rain:
+                case Environment.WeatherState.HeavyRain:
+                    return rainGrowthBonus;
+
+                case Environment.WeatherState.Storm:
+                    return stormGrowthPenalty;
+
+                case Environment.WeatherState.Clear:
+                case Environment.WeatherState.Cloudy:
+                    return clearWeatherGrowth;
+
+                case Environment.WeatherState.Snow:
+                    return 0.5f; // Slower growth in snow
+
+                case Environment.WeatherState.Fog:
+                    return 0.8f; // Slightly slower in fog
+
+                default:
+                    return 1f;
+            }
+        }
+
+        /// <summary>
+        /// Get time requirement for current stage
+        /// </summary>
+        private float GetStageTimeRequirement()
+        {
+            if (useGameTime && Environment.TimeManager.Instance != null)
+            {
+                // Game time mode: use hours
+                return gameHoursPerStage * 3600f; // Convert hours to seconds
+            }
+            else
+            {
+                // Real time mode: use PlantData time
+                return plantData.GetStageGrowthTime(currentStage);
             }
         }
 
