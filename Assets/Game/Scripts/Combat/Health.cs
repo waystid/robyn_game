@@ -101,6 +101,12 @@ namespace CozyGame.Combat
             OnDamaged?.Invoke(damageInfo);
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
+            // Spawn damage number
+            if (VFX.DamageNumberSpawner.Instance != null)
+            {
+                VFX.DamageNumberSpawner.Instance.SpawnDamageNumber(damageInfo);
+            }
+
             // Check death
             if (currentHealth <= 0f && !isDead)
             {
@@ -182,6 +188,12 @@ namespace CozyGame.Combat
             currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
+
+            // Spawn heal number
+            if (VFX.DamageNumberSpawner.Instance != null && amount > 0)
+            {
+                VFX.DamageNumberSpawner.Instance.SpawnHealNumber(amount, transform.position);
+            }
         }
 
         /// <summary>
