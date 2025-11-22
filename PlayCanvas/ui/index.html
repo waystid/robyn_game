@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Cozy Game Template - Waystid Game Forge</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- PlayCanvas Canvas -->
+    <canvas id="application-canvas" tabindex="0"></canvas>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen">
+        <div class="loading-content">
+            <h1 class="pixel-font">Cozy Game</h1>
+            <div class="loading-bar">
+                <div id="loading-progress" class="loading-fill"></div>
+            </div>
+            <p id="loading-text">Loading assets...</p>
+            <small>Powered by Waystid Game Forge</small>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="screen hidden">
+        <div class="menu-content">
+            <h1 class="pixel-font game-title">Cozy Farm</h1>
+            <div class="menu-buttons">
+                <button class="menu-btn" id="btn-new-game">New Game</button>
+                <button class="menu-btn" id="btn-continue-game">Continue</button>
+                <button class="menu-btn" id="btn-settings">Settings</button>
+                <button class="menu-btn" id="btn-credits">Credits</button>
+            </div>
+            <div class="menu-footer">
+                <p>Template by Waystid Game Forge</p>
+                <p class="version">v1.0.0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game HUD -->
+    <div id="game-hud" class="hidden">
+
+        <!-- Top Bar -->
+        <div class="hud-top">
+            <!-- Player Stats -->
+            <div class="player-stats">
+                <div class="stat-bar">
+                    <span class="stat-label">HP</span>
+                    <div class="bar health-bar">
+                        <div id="health-fill" class="bar-fill" style="width: 100%"></div>
+                        <span id="health-text" class="bar-text">100/100</span>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <span class="stat-label">MP</span>
+                    <div class="bar mana-bar">
+                        <div id="mana-fill" class="bar-fill" style="width: 100%"></div>
+                        <span id="mana-text" class="bar-text">100/100</span>
+                    </div>
+                </div>
+                <div class="stat-bar">
+                    <span class="stat-label">XP</span>
+                    <div class="bar exp-bar">
+                        <div id="exp-fill" class="bar-fill" style="width: 45%"></div>
+                        <span id="exp-text" class="bar-text">Level 5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time & Weather -->
+            <div class="time-weather">
+                <div class="time-display">
+                    <span class="icon">🌤️</span>
+                    <span id="time-text">06:00</span>
+                </div>
+                <div class="date-display">
+                    <span id="date-text">Spring 1</span>
+                </div>
+                <div class="weather-display">
+                    <span id="weather-icon">☀️</span>
+                    <span id="weather-text">Clear</span>
+                </div>
+            </div>
+
+            <!-- Currency -->
+            <div class="currency-display">
+                <div class="currency-item">
+                    <span class="icon">🪙</span>
+                    <span id="gold-amount">1,234</span>
+                </div>
+                <div class="currency-item">
+                    <span class="icon">⚡</span>
+                    <span id="silver-amount">567</span>
+                </div>
+                <div class="currency-item">
+                    <span class="icon">💎</span>
+                    <span id="gem-amount">89</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Bar -->
+        <div class="quick-bar">
+            <div class="quick-slot" data-slot="0">
+                <div class="slot-icon">1</div>
+            </div>
+            <div class="quick-slot" data-slot="1">
+                <div class="slot-icon">2</div>
+            </div>
+            <div class="quick-slot" data-slot="2">
+                <div class="slot-icon">3</div>
+            </div>
+            <div class="quick-slot" data-slot="3">
+                <div class="slot-icon">4</div>
+            </div>
+            <div class="quick-slot" data-slot="4">
+                <div class="slot-icon">5</div>
+            </div>
+            <div class="quick-slot" data-slot="5">
+                <div class="slot-icon">6</div>
+            </div>
+            <div class="quick-slot" data-slot="6">
+                <div class="slot-icon">7</div>
+            </div>
+            <div class="quick-slot" data-slot="7">
+                <div class="slot-icon">8</div>
+            </div>
+            <div class="quick-slot" data-slot="8">
+                <div class="slot-icon">9</div>
+            </div>
+            <div class="quick-slot" data-slot="9">
+                <div class="slot-icon">0</div>
+            </div>
+        </div>
+
+        <!-- Shortcuts -->
+        <div class="hud-shortcuts">
+            <button class="shortcut-btn" id="btn-inventory" title="Inventory (I)">
+                <span class="icon">🎒</span>
+            </button>
+            <button class="shortcut-btn" id="btn-quests" title="Quests (Q)">
+                <span class="icon">📜</span>
+            </button>
+            <button class="shortcut-btn" id="btn-map" title="Map (M)">
+                <span class="icon">🗺️</span>
+            </button>
+            <button class="shortcut-btn" id="btn-skills" title="Skills (K)">
+                <span class="icon">⚔️</span>
+            </button>
+        </div>
+
+        <!-- Active Quest Tracker -->
+        <div class="quest-tracker">
+            <div class="tracker-header">Active Quest</div>
+            <div id="active-quest-content" class="tracker-content">
+                <div class="quest-title">The Ancient Library</div>
+                <div class="quest-objectives">
+                    <div class="objective completed">✓ Find the entrance</div>
+                    <div class="objective">○ Collect 3 Ancient Tomes (1/3)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Panel -->
+    <div id="inventory-panel" class="panel hidden">
+        <div class="panel-header">
+            <h2>Inventory</h2>
+            <button class="btn-close">×</button>
+        </div>
+        <div class="panel-content">
+            <div class="inventory-grid" id="inventory-grid">
+                <!-- Slots generated by JavaScript -->
+            </div>
+            <div class="inventory-footer">
+                <div class="weight-display">
+                    Weight: <span id="inventory-weight">45</span>/<span id="inventory-max-weight">100</span>
+                </div>
+                <div class="slots-display">
+                    Slots: <span id="inventory-slots">18</span>/<span id="inventory-max-slots">30</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quest Log Panel -->
+    <div id="quest-panel" class="panel hidden">
+        <div class="panel-header">
+            <h2>Quest Log</h2>
+            <button class="btn-close">×</button>
+        </div>
+        <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="active">Active</button>
+            <button class="tab-btn" data-tab="completed">Completed</button>
+            <button class="tab-btn" data-tab="failed">Failed</button>
+        </div>
+        <div class="panel-content">
+            <div class="quest-list" id="active-quests">
+                <!-- Quests generated by JavaScript -->
+            </div>
+            <div class="quest-details" id="quest-details">
+                <p class="hint">Select a quest to view details</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dialogue Box -->
+    <div id="dialogue-box" class="hidden">
+        <div class="dialogue-portrait" id="dialogue-portrait">
+            <img src="" alt="NPC">
+        </div>
+        <div class="dialogue-content">
+            <div class="dialogue-header">
+                <span id="dialogue-npc-name" class="npc-name">Villager</span>
+            </div>
+            <div class="dialogue-text" id="dialogue-text">
+                Hello, traveler! Welcome to our village.
+            </div>
+            <div class="dialogue-choices" id="dialogue-choices">
+                <!-- Choices generated by JavaScript -->
+            </div>
+            <div class="dialogue-continue">
+                <button id="btn-dialogue-continue">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Panel -->
+    <div id="shop-panel" class="panel hidden">
+        <div class="panel-header">
+            <h2 id="shop-name">General Store</h2>
+            <button class="btn-close">×</button>
+        </div>
+        <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="buy">Buy</button>
+            <button class="tab-btn" data-tab="sell">Sell</button>
+        </div>
+        <div class="panel-content shop-content">
+            <div class="shop-inventory" id="shop-inventory">
+                <!-- Shop items generated by JavaScript -->
+            </div>
+            <div class="shop-details" id="shop-item-details">
+                <p class="hint">Select an item to view details</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crafting Panel -->
+    <div id="crafting-panel" class="panel hidden">
+        <div class="panel-header">
+            <h2>Crafting</h2>
+            <button class="btn-close">×</button>
+        </div>
+        <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="all">All</button>
+            <button class="tab-btn" data-tab="tools">Tools</button>
+            <button class="tab-btn" data-tab="cooking">Cooking</button>
+            <button class="tab-btn" data-tab="potions">Potions</button>
+        </div>
+        <div class="panel-content crafting-content">
+            <div class="recipe-list" id="recipe-list">
+                <!-- Recipes generated by JavaScript -->
+            </div>
+            <div class="recipe-details" id="recipe-details">
+                <div class="recipe-preview">
+                    <div class="recipe-icon">🔨</div>
+                    <div class="recipe-name">Iron Sword</div>
+                    <div class="recipe-requirements">
+                        <div class="requirement">• Iron Ore x5</div>
+                        <div class="requirement">• Wood x2</div>
+                    </div>
+                    <button class="btn-craft">Craft (C)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="panel hidden">
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button class="btn-close">×</button>
+        </div>
+        <div class="panel-tabs">
+            <button class="tab-btn active" data-tab="video">Video</button>
+            <button class="tab-btn" data-tab="audio">Audio</button>
+            <button class="tab-btn" data-tab="controls">Controls</button>
+        </div>
+        <div class="panel-content settings-content">
+            <div class="settings-section" id="video-settings">
+                <div class="setting-row">
+                    <label>Graphics Quality</label>
+                    <select id="graphics-quality">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Resolution</label>
+                    <select id="resolution">
+                        <option value="1920x1080">1920x1080</option>
+                        <option value="1280x720">1280x720</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>VSync</label>
+                    <input type="checkbox" id="vsync" checked>
+                </div>
+            </div>
+            <div class="settings-section hidden" id="audio-settings">
+                <div class="setting-row">
+                    <label>Master Volume</label>
+                    <input type="range" id="master-volume" min="0" max="100" value="80">
+                    <span id="master-volume-value">80%</span>
+                </div>
+                <div class="setting-row">
+                    <label>Music Volume</label>
+                    <input type="range" id="music-volume" min="0" max="100" value="60">
+                    <span id="music-volume-value">60%</span>
+                </div>
+                <div class="setting-row">
+                    <label>SFX Volume</label>
+                    <input type="range" id="sfx-volume" min="0" max="100" value="80">
+                    <span id="sfx-volume-value">80%</span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button class="btn-secondary" id="btn-reset-settings">Reset to Default</button>
+            <button class="btn-primary" id="btn-save-settings">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification-container">
+        <!-- Notifications appear here dynamically -->
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modal-title">Confirm Action</h3>
+            <p id="modal-message">Are you sure?</p>
+            <div class="modal-buttons">
+                <button class="btn-secondary" id="btn-modal-cancel">Cancel</button>
+                <button class="btn-primary" id="btn-modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Menu -->
+    <div id="pause-menu" class="screen hidden">
+        <div class="menu-content">
+            <h2>Paused</h2>
+            <div class="menu-buttons">
+                <button class="menu-btn" id="btn-resume">Resume</button>
+                <button class="menu-btn" id="btn-pause-settings">Settings</button>
+                <button class="menu-btn" id="btn-save-quit">Save & Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Controls -->
+    <div id="mobile-controls" class="hidden">
+        <div class="joystick-container">
+            <div id="joystick" class="joystick">
+                <div class="joystick-inner"></div>
+            </div>
+        </div>
+        <div class="mobile-buttons">
+            <button class="mobile-btn action-btn" id="mobile-interact">A</button>
+            <button class="mobile-btn action-btn" id="mobile-cancel">B</button>
+        </div>
+    </div>
+
+    <!-- Debug Panel (for development) -->
+    <div id="debug-panel" class="debug-panel hidden">
+        <div class="debug-header">
+            <span>Debug</span>
+            <button class="btn-minimize">_</button>
+        </div>
+        <div class="debug-content">
+            <div>FPS: <span id="debug-fps">60</span></div>
+            <div>Position: <span id="debug-position">0, 0, 0</span></div>
+            <div>Memory: <span id="debug-memory">45MB</span></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="playcanvas-stable.min.js"></script>
+    <script src="__start__.js"></script>
+    <script src="ui-controller.js"></script>
+
+</body>
+</html>

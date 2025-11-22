@@ -1,0 +1,191 @@
+[
+  {
+    "npcID": "elder_sage",
+    "name": "Elder Sage",
+    "description": "A wise old sage who knows the secrets of the ancient world.",
+    "role": "quest_giver",
+    "location": "village_center",
+    "dialogueTrees": {
+      "greeting": {
+        "nodes": [
+          {
+            "nodeID": "start",
+            "speaker": "elder_sage",
+            "text": "Greetings, young one. I sense great potential in you.",
+            "choices": [
+              {
+                "text": "Tell me about the ancient library.",
+                "nextNodeID": "about_library"
+              },
+              {
+                "text": "What can you teach me?",
+                "nextNodeID": "about_teaching"
+              },
+              {
+                "text": "Goodbye.",
+                "nextNodeID": "end"
+              }
+            ]
+          },
+          {
+            "nodeID": "about_library",
+            "speaker": "elder_sage",
+            "text": "The ancient library holds knowledge from before the great cataclysm. Many seek it, but few find it.",
+            "choices": [
+              {
+                "text": "I'll help you find it!",
+                "nextNodeID": "accept_quest",
+                "action": "start_quest:main_ancient_library"
+              },
+              {
+                "text": "Maybe another time.",
+                "nextNodeID": "end"
+              }
+            ]
+          },
+          {
+            "nodeID": "about_teaching",
+            "speaker": "elder_sage",
+            "text": "I can teach you the ways of magic, but first you must prove yourself worthy.",
+            "choices": [
+              {
+                "text": "How do I prove myself?",
+                "nextNodeID": "start"
+              }
+            ]
+          },
+          {
+            "nodeID": "accept_quest",
+            "speaker": "elder_sage",
+            "text": "Excellent! Take this map and seek the library in the eastern forest. May wisdom guide your path.",
+            "choices": []
+          },
+          {
+            "nodeID": "end",
+            "speaker": "elder_sage",
+            "text": "May the stars light your way.",
+            "choices": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "npcID": "village_merchant",
+    "name": "Mira the Merchant",
+    "description": "A friendly merchant who sells useful items.",
+    "role": "merchant",
+    "location": "village_market",
+    "shopInventory": [
+      {
+        "itemID": "health_potion",
+        "stock": 10,
+        "restockTime": 86400
+      },
+      {
+        "itemID": "mana_potion",
+        "stock": 10,
+        "restockTime": 86400
+      },
+      {
+        "itemID": "seed_wheat",
+        "stock": 50,
+        "restockTime": 43200
+      },
+      {
+        "itemID": "seed_tomato",
+        "stock": 20,
+        "restockTime": 43200
+      }
+    ],
+    "dialogueTrees": {
+      "greeting": {
+        "nodes": [
+          {
+            "nodeID": "start",
+            "speaker": "village_merchant",
+            "text": "Welcome to my shop! Looking for anything special today?",
+            "choices": [
+              {
+                "text": "Show me your wares.",
+                "nextNodeID": "end",
+                "action": "open_shop"
+              },
+              {
+                "text": "Just browsing.",
+                "nextNodeID": "end"
+              }
+            ]
+          },
+          {
+            "nodeID": "end",
+            "speaker": "village_merchant",
+            "text": "Come back anytime!",
+            "choices": []
+          }
+        ]
+      }
+    }
+  },
+  {
+    "npcID": "old_farmer",
+    "name": "Old Farmer Joe",
+    "description": "An experienced farmer who knows everything about crops.",
+    "role": "trainer",
+    "location": "village_farm",
+    "dialogueTrees": {
+      "greeting": {
+        "nodes": [
+          {
+            "nodeID": "start",
+            "speaker": "old_farmer",
+            "text": "Howdy! Beautiful day for farming, ain't it?",
+            "choices": [
+              {
+                "text": "Can you teach me about farming?",
+                "nextNodeID": "teach_farming"
+              },
+              {
+                "text": "What crops grow best here?",
+                "nextNodeID": "about_crops"
+              },
+              {
+                "text": "See you later!",
+                "nextNodeID": "end"
+              }
+            ]
+          },
+          {
+            "nodeID": "teach_farming",
+            "speaker": "old_farmer",
+            "text": "Sure thing! First lesson: plant your seeds in tilled soil, water 'em daily, and be patient!",
+            "choices": [
+              {
+                "text": "Thanks for the tip!",
+                "nextNodeID": "end",
+                "action": "start_quest:side_farming_basics"
+              }
+            ]
+          },
+          {
+            "nodeID": "about_crops",
+            "speaker": "old_farmer",
+            "text": "Wheat and carrots grow in spring and autumn. Tomatoes love the summer heat. Each season has its specialties!",
+            "choices": [
+              {
+                "text": "Good to know!",
+                "nextNodeID": "end"
+              }
+            ]
+          },
+          {
+            "nodeID": "end",
+            "speaker": "old_farmer",
+            "text": "Happy farming!",
+            "choices": []
+          }
+        ]
+      }
+    }
+  }
+]

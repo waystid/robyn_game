@@ -1,0 +1,87 @@
+[
+  {
+    "itemID": "apple",
+    "name": "Apple",
+    "description": "A crisp red apple. Restores a small amount of health.",
+    "type": "consumable",
+    "rarity": "common",
+    "stackable": true,
+    "maxStack": 99,
+    "sellValue": 5,
+    "buyValue": 10,
+    "weight": 0.2,
+    "effects": {
+      "health": 10
+    }
+  },
+  {
+    "itemID": "seed_moonflower",
+    "name": "Moonflower Seeds",
+    "description": "Magical seeds that bloom under moonlight.",
+    "type": "seed",
+    "rarity": "rare",
+    "stackable": true,
+    "maxStack": 99,
+    "sellValue": 25,
+    "buyValue": 50,
+    "weight": 0.1,
+    "plantID": "plant_moonflower"
+  },
+  {
+    "itemID": "iron_sword",
+    "name": "Iron Sword",
+    "description": "A sturdy iron blade.",
+    "type": "weapon",
+    "rarity": "common",
+    "stackable": false,
+    "maxStack": 1,
+    "sellValue": 100,
+    "buyValue": 200,
+    "weight": 5.0,
+    "stats": {
+      "damage": 10
+    }
+  },
+  {
+    "itemID": "health_potion",
+    "name": "Health Potion",
+    "description": "Restores 50 HP instantly.",
+    "type": "consumable",
+    "rarity": "uncommon",
+    "stackable": true,
+    "maxStack": 20,
+    "sellValue": 30,
+    "buyValue": 60,
+    "weight": 0.5,
+    "effects": {
+      "health": 50
+    }
+  },
+  {
+    "itemID": "mana_potion",
+    "name": "Mana Potion",
+    "description": "Restores 50 mana instantly.",
+    "type": "consumable",
+    "rarity": "uncommon",
+    "stackable": true,
+    "maxStack": 20,
+    "sellValue": 30,
+    "buyValue": 60,
+    "weight": 0.5,
+    "effects": {
+      "mana": 50
+    }
+  },
+  {
+    "itemID": "crystal_shard",
+    "name": "Crystal Shard",
+    "description": "A shimmering magical crystal fragment.",
+    "type": "material",
+    "rarity": "rare",
+    "stackable": true,
+    "maxStack": 99,
+    "sellValue": 50,
+    "buyValue": 100,
+    "weight": 0.3
+  }
+]
