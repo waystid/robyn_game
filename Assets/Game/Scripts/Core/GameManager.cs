@@ -128,36 +128,53 @@ namespace CozyGame
         }
 
         /// <summary>
-        /// Continue from saved game
+        /// Continue from saved game (loads most recent save)
         /// </summary>
         public void ContinueGame()
         {
             Debug.Log("[GameManager] Continuing game...");
 
-            ChangeGameState(GameState.Loading);
-
-            // Load gameplay scene
-            SceneTransitionManager.Instance?.LoadScene(gameplaySceneName, () =>
+            if (SaveSystem.SaveSystem.Instance == null)
             {
-                OnGameContinued();
-            });
+                Debug.LogError("[GameManager] SaveSystem not available!");
+                return;
+            }
+
+            // Find most recent save
+            var allMetadata = SaveSystem.SaveSystem.Instance.GetAllSaveMetadata();
+            if (allMetadata == null || allMetadata.Count == 0)
+            {
+                Debug.LogWarning("[GameManager] No save data found!");
+                return;
+            }
+
+            // Load most recent save (first in list, sorted by date)
+            SaveSystem.SaveSystem.Instance.LoadGame(0);
         }
 
         /// <summary>
-        /// Called when continuing saved game
+        /// Load from specific save slot
         /// </summary>
-        private void OnGameContinued()
+        public void LoadFromSlot(int slotIndex)
         {
-            ChangeGameState(GameState.Playing);
+            Debug.Log($"[GameManager] Loading from slot {slotIndex}...");
 
-            // TODO: Load save data here when save system is implemented
-            // SaveSystem.LoadGame();
+            if (SaveSystem.SaveSystem.Instance == null)
+            {
+                Debug.LogError("[GameManager] SaveSystem not available!");
+                return;
+            }
 
-            SetCursorState(false, CursorLockMode.Locked);
+            ChangeGameState(GameState.Loading);
 
-            OnGameStarted?.Invoke();
+            // SaveSystem will handle loading and scene transition
+            bool success = SaveSystem.SaveSystem.Instance.LoadGame(slotIndex);
 
-            Debug.Log("[GameManager] Game continued!");
+            if (!success)
+            {
+                Debug.LogError($"[GameManager] Failed to load from slot {slotIndex}");
+                ChangeGameState(GameState.MainMenu);
+            }
         }
 
         /// <summary>
@@ -322,9 +339,12 @@ namespace CozyGame
         /// </summary>
         public bool HasSaveData()
         {
-            // TODO: Implement when save system is added
-            // return SaveSystem.HasSaveFile();
-            return false; // Placeholder
+            if (SaveSystem.SaveSystem.Instance == null)
+                return false;
+
+            // Check if any save slot has data
+            var allMetadata = SaveSystem.SaveSystem.Instance.GetAllSaveMetadata();
+            return allMetadata != null && allMetadata.Count > 0;
         }
 
         /// <summary>

@@ -338,5 +338,64 @@ namespace CozyGame
 
             Log("All quests reset!");
         }
+
+        // ========== SAVE SYSTEM INTEGRATION ==========
+
+        /// <summary>
+        /// Get save data for all quests
+        /// </summary>
+        public List<SaveSystem.QuestSaveData> GetSaveData()
+        {
+            List<SaveSystem.QuestSaveData> saveData = new List<SaveSystem.QuestSaveData>();
+
+            // Save active quests
+            foreach (var quest in activeQuests)
+            {
+                var questSave = new SaveSystem.QuestSaveData(quest.questID, "Active");
+                saveData.Add(questSave);
+            }
+
+            // Save completed quests
+            foreach (var quest in completedQuests)
+            {
+                var questSave = new SaveSystem.QuestSaveData(quest.questID, "Completed");
+                questSave.lastCompletedTime = quest.lastCompletedTime;
+                questSave.timesCompleted = quest.timesCompleted;
+                saveData.Add(questSave);
+            }
+
+            return saveData;
+        }
+
+        /// <summary>
+        /// Load quest data from save
+        /// </summary>
+        public void LoadSaveData(List<SaveSystem.QuestSaveData> saveData)
+        {
+            // Clear current state
+            activeQuests.Clear();
+            completedQuests.Clear();
+
+            // TODO: This requires quest ScriptableObjects to be loaded/referenced
+            // For now, just log the data
+            // In full implementation, you'd need a QuestDatabase to look up quests by ID
+
+            foreach (var questSave in saveData)
+            {
+                Log($"Loading quest: {questSave.questID} - {questSave.questState}");
+
+                // Example of how you would restore state:
+                // QuestData quest = QuestDatabase.GetQuestByID(questSave.questID);
+                // if (quest != null)
+                // {
+                //     if (questSave.questState == "Active")
+                //         activeQuests.Add(quest);
+                //     else if (questSave.questState == "Completed")
+                //         completedQuests.Add(quest);
+                // }
+            }
+
+            Log($"Loaded {saveData.Count} quest states from save");
+        }
     }
 }

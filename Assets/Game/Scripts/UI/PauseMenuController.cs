@@ -16,6 +16,9 @@ namespace CozyGame.UI
         [Tooltip("Settings panel")]
         public GameObject settingsPanel;
 
+        [Tooltip("Save slots panel")]
+        public GameObject saveSlotsPanel;
+
         [Header("Buttons")]
         [Tooltip("Resume button")]
         public Button resumeButton;
@@ -31,6 +34,9 @@ namespace CozyGame.UI
 
         [Tooltip("Quit button (optional, for desktop)")]
         public Button quitButton;
+
+        [Tooltip("Save Game button")]
+        public Button saveGameButton;
 
         [Header("Confirmation Dialogs")]
         [Tooltip("Restart confirmation dialog")]
@@ -53,6 +59,7 @@ namespace CozyGame.UI
         public string resumeSound = "unpause";
 
         private SettingsMenuController settingsController;
+        private SaveSlotMenuController saveSlotMenuController;
 
         private void Awake()
         {
@@ -82,10 +89,21 @@ namespace CozyGame.UI
                 quitButton.onClick.AddListener(OnQuitClicked);
             }
 
+            if (saveGameButton != null)
+            {
+                saveGameButton.onClick.AddListener(OnSaveGameClicked);
+            }
+
             // Get settings controller
             if (settingsPanel != null)
             {
                 settingsController = settingsPanel.GetComponent<SettingsMenuController>();
+            }
+
+            // Get save slot menu controller
+            if (saveSlotsPanel != null)
+            {
+                saveSlotMenuController = saveSlotsPanel.GetComponent<SaveSlotMenuController>();
             }
 
             // Hide all panels initially
@@ -145,6 +163,7 @@ namespace CozyGame.UI
         {
             if (pauseMenuPanel != null) pauseMenuPanel.SetActive(true);
             if (settingsPanel != null) settingsPanel.SetActive(false);
+            if (saveSlotsPanel != null) saveSlotsPanel.SetActive(false);
 
             HideAllConfirmDialogs();
         }
@@ -156,6 +175,7 @@ namespace CozyGame.UI
         {
             if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
             if (settingsPanel != null) settingsPanel.SetActive(false);
+            if (saveSlotsPanel != null) saveSlotsPanel.SetActive(false);
 
             HideAllConfirmDialogs();
         }
@@ -247,6 +267,23 @@ namespace CozyGame.UI
             else
             {
                 ConfirmQuit();
+            }
+        }
+
+        /// <summary>
+        /// Save Game button clicked
+        /// </summary>
+        private void OnSaveGameClicked()
+        {
+            PlayButtonSound();
+
+            if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+            if (saveSlotsPanel != null) saveSlotsPanel.SetActive(true);
+
+            if (saveSlotMenuController != null)
+            {
+                saveSlotMenuController.SetBackCallback(ShowPauseMenu);
+                saveSlotMenuController.Show(SaveSlotMenuMode.Save);
             }
         }
 

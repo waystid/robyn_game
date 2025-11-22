@@ -316,6 +316,55 @@ namespace CozyGame
                 accuracyPercentage = GetAccuracyPercentage()
             };
         }
+
+        // ========== SAVE SYSTEM INTEGRATION ==========
+
+        /// <summary>
+        /// Get save data for all riddles
+        /// </summary>
+        public List<SaveSystem.RiddleSaveData> GetSaveData()
+        {
+            List<SaveSystem.RiddleSaveData> saveData = new List<SaveSystem.RiddleSaveData>();
+
+            foreach (var riddle in allRiddles)
+            {
+                var riddleSave = new SaveSystem.RiddleSaveData(riddle.riddleID);
+                riddleSave.isAnswered = riddle.hasBeenAnswered;
+                riddleSave.wasCorrect = riddle.wasAnsweredCorrectly;
+                riddleSave.lastAttemptTime = riddle.lastAttemptTime;
+                riddleSave.attemptCount = riddle.totalAttempts;
+                saveData.Add(riddleSave);
+            }
+
+            return saveData;
+        }
+
+        /// <summary>
+        /// Load riddle data from save
+        /// </summary>
+        public void LoadSaveData(List<SaveSystem.RiddleSaveData> saveData)
+        {
+            // TODO: This requires riddle ScriptableObjects to be loaded/referenced
+            // For now, just log the data
+            // In full implementation, you'd need a RiddleDatabase to look up riddles by ID
+
+            foreach (var riddleSave in saveData)
+            {
+                Log($"Loading riddle: {riddleSave.riddleID} - Answered: {riddleSave.isAnswered}, Correct: {riddleSave.wasCorrect}");
+
+                // Example of how you would restore state:
+                // RiddleData riddle = RiddleDatabase.GetRiddleByID(riddleSave.riddleID);
+                // if (riddle != null)
+                // {
+                //     riddle.hasBeenAnswered = riddleSave.isAnswered;
+                //     riddle.wasAnsweredCorrectly = riddleSave.wasCorrect;
+                //     riddle.lastAttemptTime = riddleSave.lastAttemptTime;
+                //     riddle.totalAttempts = riddleSave.attemptCount;
+                // }
+            }
+
+            Log($"Loaded {saveData.Count} riddle states from save");
+        }
     }
 
     /// <summary>

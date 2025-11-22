@@ -20,6 +20,9 @@ namespace CozyGame.UI
         [Tooltip("Credits panel")]
         public GameObject creditsPanel;
 
+        [Tooltip("Load game panel (save slots)")]
+        public GameObject loadGamePanel;
+
         [Header("Buttons")]
         [Tooltip("New Game button")]
         public Button newGameButton;
@@ -51,6 +54,7 @@ namespace CozyGame.UI
         public AudioClip menuMusic;
 
         private SettingsMenuController settingsController;
+        private SaveSlotMenuController loadGameMenuController;
 
         private void Start()
         {
@@ -89,6 +93,12 @@ namespace CozyGame.UI
                 settingsController = settingsPanel.GetComponent<SettingsMenuController>();
             }
 
+            // Get load game menu controller
+            if (loadGamePanel != null)
+            {
+                loadGameMenuController = loadGamePanel.GetComponent<SaveSlotMenuController>();
+            }
+
             // Set version text
             if (versionText != null)
             {
@@ -113,6 +123,7 @@ namespace CozyGame.UI
             if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
             if (settingsPanel != null) settingsPanel.SetActive(false);
             if (creditsPanel != null) creditsPanel.SetActive(false);
+            if (loadGamePanel != null) loadGamePanel.SetActive(false);
         }
 
         /// <summary>
@@ -133,19 +144,19 @@ namespace CozyGame.UI
         }
 
         /// <summary>
-        /// Continue button clicked
+        /// Continue button clicked - show load game menu
         /// </summary>
         private void OnContinueClicked()
         {
             PlayButtonSound();
 
-            if (GameManager.Instance != null)
+            if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
+            if (loadGamePanel != null) loadGamePanel.SetActive(true);
+
+            if (loadGameMenuController != null)
             {
-                GameManager.Instance.ContinueGame();
-            }
-            else
-            {
-                Debug.LogWarning("[MainMenuController] GameManager not found!");
+                loadGameMenuController.SetBackCallback(ShowMainMenu);
+                loadGameMenuController.Show(SaveSlotMenuMode.Load);
             }
         }
 
