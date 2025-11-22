@@ -414,6 +414,18 @@ namespace CozyGame.SaveSystem
                 data.inventoryData.equippedItems = Inventory.EquipmentSystem.Instance.GetSaveData();
             }
 
+            // Capture achievement data
+            if (Achievements.AchievementSystem.Instance != null)
+            {
+                data.achievementData = Achievements.AchievementSystem.Instance.GetSaveData();
+            }
+
+            // Capture statistics data
+            if (Achievements.StatisticsTracker.Instance != null)
+            {
+                data.statisticsData = Achievements.StatisticsTracker.Instance.GetSaveData();
+            }
+
             // Capture world data
             data.worldData.gameTime = GetCurrentPlaytime();
             if (GameManager.Instance != null)
@@ -482,6 +494,18 @@ namespace CozyGame.SaveSystem
             if (Inventory.EquipmentSystem.Instance != null)
             {
                 Inventory.EquipmentSystem.Instance.LoadSaveData(data.inventoryData.equippedItems);
+            }
+
+            // Apply achievement data
+            if (Achievements.AchievementSystem.Instance != null)
+            {
+                Achievements.AchievementSystem.Instance.LoadSaveData(data.achievementData);
+            }
+
+            // Apply statistics data
+            if (Achievements.StatisticsTracker.Instance != null)
+            {
+                Achievements.StatisticsTracker.Instance.LoadSaveData(data.statisticsData);
             }
 
             Log("Game state applied from save data");

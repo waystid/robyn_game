@@ -33,8 +33,14 @@ namespace CozyGame.SaveSystem
         [Header("World Data")]
         public WorldSaveData worldData;
 
-        [Header("Inventory Data (Future)")]
+        [Header("Inventory Data")]
         public InventorySaveData inventoryData;
+
+        [Header("Achievement Data")]
+        public List<Achievements.AchievementProgress> achievementData = new List<Achievements.AchievementProgress>();
+
+        [Header("Statistics Data")]
+        public Dictionary<string, float> statisticsData = new Dictionary<string, float>();
 
         /// <summary>
         /// Create new save data with default values
